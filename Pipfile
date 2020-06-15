@@ -8,8 +8,10 @@ verify_ssl = true
 [packages]
 flask = "*"
 numpy = "*"
-opencv-python = "*"
 gunicorn = "*"
+pip = "*"
+install = "*"
+opencv-python-headless = "*"
 
 [requires]
 python_version = "3.7"
