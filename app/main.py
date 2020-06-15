@@ -22,7 +22,7 @@ def homepage():
 <!DOCTYPE html>
 <head>
    <title>My title</title>
-   <link rel="stylesheet" href="http://stash.compjour.org/assets/css/foundation.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
    <script>
         function getText() {
             var file = document.getElementById("img").files[0];
@@ -34,7 +34,16 @@ def homepage():
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = function () {
                     // do something to response
-                    console.log(this.responseText);
+                    var p = JSON.parse(this.responseText);
+                    var tbl = "<table><tr><th>ID</th><th>Word</th><th>Confidence</th></tr>";
+                    for (var key in p) {
+                        if (p.hasOwnProperty(key)) {
+                            tbl += "<tr><td>" + key + "</td><td>" + p[key]["word"] + "</td><td>" + p[key]["confidence"] + "</td></tr>";
+                        }
+                    }
+                    tbl += "</table>";
+                    document.body.innerHTML += tbl;
+                    console.log(tbl)
                 };
                 var inp = {"image": reader.result.split(',')[1]};
                 xhr.send(JSON.stringify(inp));
@@ -48,9 +57,9 @@ def homepage():
     <p>here's a paragraph, fwiw</p>
     <p>And here's an image:</p>
     <a href="https://www.flickr.com/photos/zokuga/14615349406/">
-        <img src="http://stash.compjour.org/assets/images/sunset.jpg" alt="it's a nice sunset">
+        <img id="sample" src="http://stash.compjour.org/assets/images/sunset.jpg" alt="it's a nice sunset">
     </a>
-    <input type="file" id="img" name="img" accept="image/*">
+    <input type="file" id="img" name="img" accept="image/*" onchange="document.getElementById('sample').src = window.URL.createObjectURL(this.files[0])">
     <button onclick="getText()">Submit</button>
 </body>
 """
