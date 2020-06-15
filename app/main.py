@@ -193,6 +193,6 @@ def getWords():
                 conf += word["confidence"]
             conf = conf / len(line["words"])
             # print(line["text"] + " --- confidence: " + str(conf) + ", distance: " + str(seq.quick_ratio() * 100))
-            text[line["text"]] = str(conf)
+            text[idx] = {"word": line["text"], "confidence":str(conf)}
             idx += 1
     return text
