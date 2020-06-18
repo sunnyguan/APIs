@@ -132,7 +132,7 @@ def course_api():
     time.sleep(1)
 
     driver.find_element_by_id("srch").send_keys(query)
-    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
+    driver.execute_script("do_guided_search()")
     # time.sleep(3)
     table = 0
     ki = 0
