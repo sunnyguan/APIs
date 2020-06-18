@@ -102,7 +102,6 @@ def testpage():
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
    <script>
         function getText() {
-            document.body.innerHTML += "request submitted, please wait...";
             var query = document.getElementById("srch").value;
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/api/course', true);
@@ -137,7 +136,7 @@ def course_api():
     # time.sleep(3)
     table = 0
     ki = 0
-    while ki <= 70:
+    while ki <= 30:
         try:
             table = driver.find_element_by_xpath("//table/tbody")
             break
