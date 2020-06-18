@@ -45,7 +45,7 @@ atexit.register(close_running_threads)
 def home_view():
     return "<h1>Hello World!</h1>"
 
-@app.route('/')
+@app.route('/ocr')
 def homepage():
     return """
 <!DOCTYPE html>
@@ -93,6 +93,36 @@ def homepage():
 </body>
 """
 
+@app.route('/')
+def testpage():
+    return """
+<!DOCTYPE html>
+<head>
+   <title>My title</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+   <script>
+        function getText() {
+            var query = document.getElementById("srch").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/course', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                var p = JSON.parse(this.responseText);
+                document.body.innerHTML += "check console for response";
+                console.log(p)
+            };
+            var inp = {"query": query};
+            xhr.send(JSON.stringify(inp));
+        }
+   </script>
+</head>
+<body style="width: 880px; margin: auto;">  
+    <input id="srch" type="text" placeholder="Search Term" />
+    <button onclick="getText()">Submit</button>
+</body>
+"""
+
+
 @app.route("/api/course", methods=['POST'])
 def course_api():
     req = request.json
@@ -114,7 +144,7 @@ def course_api():
             print('wait...')
             ki += 1
             time.sleep(0.3)
-    if(ki == 30):
+    if table == 0:
         resp = jsonify({"bad": "true"})
         resp.status_code = 200
         return resp
