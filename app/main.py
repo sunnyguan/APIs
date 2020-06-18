@@ -36,6 +36,9 @@ options.add_argument('--headless')
 # options.add_argument('window-size=1200x600')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
+
+driver.get("https://coursebook.utdallas.edu/search")
+
 def close_running_threads():
     driver.close()
 atexit.register(close_running_threads)
@@ -127,9 +130,10 @@ def course_api():
     req = request.json
     query = req["query"]
 
-    driver.get("https://coursebook.utdallas.edu/search")
+    
     time.sleep(1)
 
+    driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
     driver.find_element_by_id("srch").send_keys(Keys.RETURN)
     # time.sleep(3)
