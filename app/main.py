@@ -4,15 +4,29 @@ import numpy as np
 import cv2
 import json
 import os
+import atexit
 import sys
 import requests
 import time
 import difflib
 import argparse
 import imutils
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
+GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
+CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.binary_location = GOOGLE_CHROME_PATH
+driver = webdriver.Chrome(chrome_options=chrome_options)
+
+def close_running_threads():
+    driver.close()
+atexit.register(close_running_threads)
 
 @app.route("/hello")
 def home_view():
@@ -65,6 +79,40 @@ def homepage():
     <button onclick="getText()">Submit</button>
 </body>
 """
+
+@app.route("/api/course", methods=['POST'])
+def course_api():
+    req = request.json
+    query = req["query"]
+
+    driver.get("https://coursebook.utdallas.edu/search")
+    time.sleep(1)
+
+    driver.find_element_by_id("srch").send_keys(query)
+    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
+    # time.sleep(3)
+    table = 0
+    while True:
+        try:
+            table = driver.find_element_by_xpath("//table/tbody")
+            break
+        except Exception as e:
+            print('wait...')
+            time.sleep(0.3)
+    rows = table.find_elements_by_tag_name("tr")
+    text = []
+    j = 1
+    for row in rows:
+        curr = {}
+        col = row.find_elements_by_tag_name("td")
+        for i in range(0, len(col)):
+            curr[i] = col[i].text
+        text.append(curr)
+        j+=1
+    print(text)
+    resp = jsonify(text)
+    resp.status_code = 200
+    return resp
 
 @app.route("/api/face", methods=['POST'])
 def detect_face():
