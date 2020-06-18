@@ -16,13 +16,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
-GOOGLE_CHROME_PATH = '/app/.apt/usr/bin/google_chrome'
-CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.binary_location = GOOGLE_CHROME_PATH
-driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
+chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
+options = webdriver.ChromeOptions()
+options.binary_location = chrome_bin
+options.add_argument("--disable-gpu")
+options.add_argument("--no-sandbox")
+options.add_argument('headless')
+options.add_argument('window-size=1200x600')
+driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
 def close_running_threads():
     driver.close()
