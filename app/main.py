@@ -15,9 +15,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
-"""
+
 app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+"""
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument("--no-sandbox")
@@ -25,9 +26,7 @@ chrome_options.add_argument("--disable-gpu")
 driver = webdriver.Chrome(chrome_options=chrome_options)
 """
 
-app = Flask(__name__)
 CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
-faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
 options = webdriver.ChromeOptions()
 options.binary_location = chrome_bin
@@ -108,7 +107,7 @@ def testpage():
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
                 var p = JSON.parse(this.responseText);
-                document.body.innerHTML += "check console for response";
+                document.body.innerHTML += p;
                 console.log(p)
             };
             var inp = {"query": query};
@@ -132,7 +131,7 @@ def course_api():
     time.sleep(1)
 
     driver.find_element_by_id("srch").send_keys(query)
-    driver.execute_script("do_guided_search()")
+    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
     # time.sleep(3)
     table = 0
     ki = 0
