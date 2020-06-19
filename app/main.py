@@ -24,28 +24,31 @@ faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 software_names = [SoftwareName.CHROME.value]
 operating_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
 user_agent_rotator = UserAgent(software_names=software_names, operating_systems=operating_systems, limit=100)
-user_agent = user_agent_rotator.get_random_user_agent()
 
-"""
-chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument('--headless')
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument(f'user-agent={user_agent}')
-driver = webdriver.Chrome(chrome_options=chrome_options)
-"""
+def startDriver(i):
+    user_agent = user_agent_rotator.get_random_user_agent()
+    global driver
+    if i == 0:
+        options = webdriver.ChromeOptions()
+        # options.add_argument('--headless')
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument(f'user-agent={user_agent}')
+        driver = webdriver.Chrome(options=options)
+    else:
+        CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
+        chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
+        options = webdriver.ChromeOptions()
+        options.binary_location = chrome_bin
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument('--headless')
+        options.add_argument(f'user-agent={user_agent}')
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+    driver.get("https://coursebook.utdallas.edu/search")
 
-CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
-chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
-options = webdriver.ChromeOptions()
-options.binary_location = chrome_bin
-options.add_argument("--disable-gpu")
-options.add_argument("--no-sandbox")
-options.add_argument('--headless')
-options.add_argument(f'user-agent={user_agent}')
-driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
-
-driver.get("https://coursebook.utdallas.edu/search")
+onServer = 1
+startDriver(onServer)
 
 def close_running_threads():
     driver.close()
@@ -145,7 +148,8 @@ def course_api():
     # time.sleep(3)
     table = 0
     ki = 0
-    while ki <= 60:
+    timeout = 30
+    while ki <= timeout:
         if len(driver.find_elements_by_class_name("uil-ring-alt")) == 1:
             break
         else:
@@ -155,7 +159,8 @@ def course_api():
     
     table = driver.find_elements_by_tag_name("tbody")
     if len(table) != 1:
-        if ki >= 60:
+        if ki >= timeout:
+            startDriver(onServer)
             print("ref")
         resp = jsonify([{"bad": "true"}])
         resp.status_code = 200
@@ -172,7 +177,7 @@ def course_api():
         for row in rows:
             curr = {}
             col = row.find_elements_by_tag_name("td")
-            for i in range(0, len(col)):
+            for i in range(0, len(col) - 2):
                 curr[i] = col[i].text
             text.append(curr)
             j+=1
