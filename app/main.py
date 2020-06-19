@@ -20,7 +20,7 @@ app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 """
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
+# chrome_options.add_argument('--headless')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-gpu")
 driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -129,8 +129,6 @@ def course_api():
     req = request.json
     query = req["query"]
 
-    
-    driver.execute_script("location.reload(true);")
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
     driver.find_element_by_id("srch").send_keys(Keys.RETURN)
@@ -138,21 +136,21 @@ def course_api():
     table = 0
     ki = 0
     while ki <= 60:
-        try:
-            table = driver.find_element_by_css_selector("tbody")
+        if len(driver.find_elements_by_class_name("uil-ring-alt")) == 1:
             break
-        except Exception as e:
-            if len(driver.find_elements_by_css_selector(".uil-ring-alt")) == 1:
-                table = 0
-                break;
+        else:
             print('wait...')
             ki += 1
-            time.sleep(0.3)
-    if table == 0:
+            time.sleep(0.5)
+    
+    table = driver.find_elements_by_tag_name("tbody")
+    if len(table) != 1:
         resp = jsonify({"bad": "true"})
         resp.status_code = 200
         return resp
     else:
+        print("found!")
+        table = table[0]
         rows = table.find_elements_by_tag_name("tr")
         text = []
         j = 1
