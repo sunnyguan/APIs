@@ -108,9 +108,9 @@ def testpage():
             xhr.open('POST', '/api/course', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
-                var p = JSON.parse(this.responseText);
-                document.body.innerHTML += p;
-                console.log(p)
+                //  p = JSON.parse(this.responseText);
+                document.getElementById("output").innerHTML = this.responseText;
+                console.log(this.responseText)
             };
             var inp = {"query": query};
             xhr.send(JSON.stringify(inp));
@@ -120,6 +120,7 @@ def testpage():
 <body style="width: 880px; margin: auto;">  
     <input id="srch" type="text" placeholder="Search Term" />
     <button onclick="getText()">Submit</button>
+    <div id="output"></div>
 </body>
 """
 
