@@ -18,7 +18,7 @@ from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
-"""
+
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument("--no-sandbox")
@@ -34,7 +34,7 @@ options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument('--headless')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
-
+"""
 
 driver.get("https://coursebook.utdallas.edu/search")
 
@@ -129,7 +129,7 @@ def testpage():
 def course_api():
     req = request.json
     query = req["query"]
-
+    driver.get("https://coursebook.utdallas.edu/search")
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
     driver.find_element_by_id("srch").send_keys(Keys.RETURN)
