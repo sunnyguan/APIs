@@ -130,6 +130,7 @@ def course_api():
     req = request.json
     query = req["query"]
 
+    
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
     driver.find_element_by_id("srch").send_keys(Keys.RETURN)
@@ -138,12 +139,12 @@ def course_api():
     ki = 0
     while ki <= 30:
         try:
-            table = driver.find_element_by_css_selector("tbody")
+            table = driver.find_element_by_xpath("//table/tbody")
             break
         except Exception as e:
             print('wait...')
             ki += 1
-            time.sleep(0.5)
+            time.sleep(0.3)
     if table == 0:
         resp = jsonify({"bad": "true"})
         resp.status_code = 200
