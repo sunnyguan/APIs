@@ -37,7 +37,7 @@ options.add_argument('--headless')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
 
-driver.get("https://coursebook.utdallas.edu/search")
+
 
 def close_running_threads():
     driver.close()
@@ -130,7 +130,8 @@ def course_api():
     req = request.json
     query = req["query"]
 
-    
+    driver.get("https://coursebook.utdallas.edu/search")
+    driver.execute_script("location.reload(true);")
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
     driver.find_element_by_id("srch").send_keys(Keys.RETURN)
@@ -139,9 +140,12 @@ def course_api():
     ki = 0
     while ki <= 30:
         try:
-            table = driver.find_element_by_xpath("//table/tbody")
+            table = driver.find_element_by_css_selector("tbody")
             break
         except Exception as e:
+            if len(driver.find_elements_by_css_selector(".uil-ring-alt")) == 1:
+                table = 0
+                break;
             print('wait...')
             ki += 1
             time.sleep(0.3)
