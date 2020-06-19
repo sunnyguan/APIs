@@ -42,7 +42,7 @@ options.binary_location = chrome_bin
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument('--headless')
-chrome_options.add_argument(f'user-agent={user_agent}')
+options.add_argument(f'user-agent={user_agent}')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
 driver.get("https://coursebook.utdallas.edu/search")
