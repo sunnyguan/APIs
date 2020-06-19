@@ -33,11 +33,10 @@ options.binary_location = chrome_bin
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument('--headless')
-# options.add_argument('window-size=1200x600')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
 
 
-
+driver.get("https://coursebook.utdallas.edu/search")
 
 def close_running_threads():
     driver.close()
@@ -130,7 +129,7 @@ def course_api():
     req = request.json
     query = req["query"]
 
-    driver.get("https://coursebook.utdallas.edu/search")
+    
     driver.execute_script("location.reload(true);")
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys(query)
@@ -138,7 +137,7 @@ def course_api():
     # time.sleep(3)
     table = 0
     ki = 0
-    while ki <= 30:
+    while ki <= 60:
         try:
             table = driver.find_element_by_css_selector("tbody")
             break
