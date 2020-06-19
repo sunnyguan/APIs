@@ -14,15 +14,24 @@ import imutils
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+from random_user_agent.user_agent import UserAgent
+from random_user_agent.params import SoftwareName, OperatingSystem
 
 
 app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+
+software_names = [SoftwareName.CHROME.value]
+operating_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
+user_agent_rotator = UserAgent(software_names=software_names, operating_systems=operating_systems, limit=100)
+user_agent = user_agent_rotator.get_random_user_agent()
+
 """
 chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-gpu")
+chrome_options.add_argument(f'user-agent={user_agent}')
 driver = webdriver.Chrome(chrome_options=chrome_options)
 """
 
@@ -33,8 +42,8 @@ options.binary_location = chrome_bin
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument('--headless')
+chrome_options.add_argument(f'user-agent={user_agent}')
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=options)
-
 
 driver.get("https://coursebook.utdallas.edu/search")
 
@@ -146,6 +155,8 @@ def course_api():
     
     table = driver.find_elements_by_tag_name("tbody")
     if len(table) != 1:
+        if ki >= 60:
+            print("ref")
         resp = jsonify([{"bad": "true"}])
         resp.status_code = 200
         return resp
