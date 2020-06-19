@@ -20,7 +20,7 @@ app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 """
 chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-gpu")
 driver = webdriver.Chrome(chrome_options=chrome_options)
@@ -151,6 +151,8 @@ def course_api():
     else:
         print("found!")
         table = table[0]
+        text = {"html":table.get_attribute("innerHTML")}
+        """ 
         rows = table.find_elements_by_tag_name("tr")
         text = []
         j = 1
@@ -161,7 +163,7 @@ def course_api():
                 curr[i] = col[i].text
             text.append(curr)
             j+=1
-        print(text)
+        print(text)"""
         resp = jsonify(text)
         resp.status_code = 200
         return resp
