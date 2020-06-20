@@ -137,6 +137,7 @@ def course_api():
             if len(a) >= 4:
                 text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
             data.append(text)
+        print(len(data))
         resp = jsonify(data)
         print("finished with good.")
     else:
