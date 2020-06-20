@@ -142,6 +142,8 @@ def course_api():
             a = entry.find_all('td')[4].findAll(text=True)
             if len(a) >= 4:
                 text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
+            else:
+                text[4] = ""
             data.append(text)
         print(len(data))
         resp = jsonify(data)
