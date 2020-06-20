@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import json
 import os
+import os.path
 import atexit
 import sys
 import requests
@@ -20,10 +21,28 @@ app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 app.logger.info("uh?")
 
+cookie_filename="cookie.txt"
+cookie_string="3e5fc6ad522efacf8cb9dccca54e4f86"
+if os.path.isfile(cookie_filename):
+    f = open(cookie_filename, "r")
+    cookie_string = f.read().strip()
+    f.close()
+
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  'Cookie': 'PTGSESSID=3e5fc6ad522efacf8cb9dccca54e4f86; PTGSESSID=70409b185077aa87f60f7ca8ec339285'
+  'Cookie': 'PTGSESSID=' + cookie_string
 }
+
+@app.route("/change_cookie")
+def cookie_change():
+    try:
+        cookie_string = request.args.get('cookie').strip()
+        f = open(cookie_filename, "w")
+        f.write(cookie_string)
+        f.close()
+        return "<p>New cookie " + cookie_string + " successfully stored.</p>"
+    except Exception as e:
+        return "<h1>Error</h1>"
 
 @app.route("/hello")
 def home_view():
@@ -158,7 +177,7 @@ def course_api():
         print("finished with big bad.")
         resp.status_code = 200
         return resp"""
-
+        
 @app.route("/api/face", methods=['POST'])
 def detect_face():
     try:
