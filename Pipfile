@@ -14,8 +14,8 @@ install = "*"
 opencv-python-headless = "*"
 requests = "*"
 imutils = "*"
-selenium = "*"
 random-user-agent = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"

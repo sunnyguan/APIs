@@ -11,48 +11,20 @@ import time
 import difflib
 import argparse
 import imutils
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from random_user_agent.user_agent import UserAgent
-from random_user_agent.params import SoftwareName, OperatingSystem
-
+import http.client
+import mimetypes
+import logging
+from bs4 import BeautifulSoup as bs4
 
 app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+app.logger.info("uh?")
 
-software_names = [SoftwareName.CHROME.value]
-operating_systems = [OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value]
-user_agent_rotator = UserAgent(software_names=software_names, operating_systems=operating_systems, limit=100)
-
-def startDriver(i):
-    user_agent = user_agent_rotator.get_random_user_agent()
-    global driver
-    if i == 0:
-        options = webdriver.ChromeOptions()
-        # options.add_argument('--headless')
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-gpu")
-        options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(options=options)
-    else:
-        CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
-        chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
-        options = webdriver.ChromeOptions()
-        options.binary_location = chrome_bin
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument('--headless')
-        options.add_argument(f'user-agent={user_agent}')
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
-    driver.get("https://coursebook.utdallas.edu/search")
-
-onServer = 1
-startDriver(onServer)
-
-def close_running_threads():
-    driver.close()
-atexit.register(close_running_threads)
+conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
+headers = {
+  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+  'Cookie': 'PTGSESSID=3e5fc6ad522efacf8cb9dccca54e4f86; PTGSESSID=70409b185077aa87f60f7ca8ec339285'
+}
 
 @app.route("/hello")
 def home_view():
@@ -139,54 +111,41 @@ def testpage():
 
 @app.route("/api/course", methods=['POST'])
 def course_api():
-    req = request.json
-    query = req["query"]
-    driver.get("https://coursebook.utdallas.edu/search")
-    driver.find_element_by_id("srch").clear()
-    driver.find_element_by_id("srch").send_keys(query)
-    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
-    # time.sleep(3)
-    table = 0
-    ki = 0
-    timeout = 30
-    while ki <= timeout:
-        if len(driver.find_elements_by_class_name("uil-ring-alt")) == 1:
-            break
+    try:
+        req = request.json
+
+        print("acquiring html...")
+        payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
+        print(payload)
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        res = conn.getresponse()
+        data = res.read().decode("utf-8")
+        html = data.split('"#sr":"')[1].split("}}")[0]
+        s = html.replace("\\n", "\n").replace("\\", "")
+        print("acquired.")
+        print("collecting...")
+        soup = bs4(s, 'html.parser')
+        
+        if len(soup.find_all('tbody')) == 1:
+            data = []
+            for entry in soup.find('tbody').find_all('tr'):
+                text = {}
+                i = 0
+                for detail in entry.find_all('td'):
+                    text[i] = detail.text
+                    i += 1
+                data.append(text)
+            resp = jsonify(data)
+            print("finished with good.")
         else:
-            print('wait...' + str(len(driver.find_elements_by_class_name("uil-ring-alt"))))
-            ki += 1
-            time.sleep(0.5)
-    
-    table = driver.find_elements_by_tag_name("tbody")
-    if len(table) != 1:
-        if ki >= timeout:
-            startDriver(onServer)
-            print("ref")
-        resp = jsonify([{"bad": "true"}])
+            resp = jsonify([{"bad": "true"}])
+            print("finished with bad.")
         resp.status_code = 200
         return resp
-    else:
-        print("found!")
-        table = table[0]
-        
-        # text = {"html":table.get_attribute("innerHTML")}
-        
-        rows = table.find_elements_by_tag_name("tr")
-        text = []
-        j = 1
-        for row in rows:
-            curr = {}
-            col = row.find_elements_by_tag_name("td")
-            for i in range(0, len(col) - 2):
-                curr[i] = col[i].text
-            text.append(curr)
-            j+=1
-        # print(text)
-        
-        resp = jsonify(text)
+    except Exception as e:
+        resp = jsonify([{"bad": "true"}])
+        print("finished with big bad.")
         resp.status_code = 200
-        
-        print("finished")
         return resp
 
 @app.route("/api/face", methods=['POST'])
