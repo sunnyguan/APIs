@@ -131,9 +131,11 @@ def course_api():
             for entry in soup.find('tbody').find_all('tr'):
                 text = {}
                 i = 0
-                for detail in entry.find_all('td'):
-                    text[i] = detail.text
-                    i += 1
+                for i in range(0, len(entry.find_all('td')) - 3):
+                    text[i] = entry.find_all('td')[i].text
+                a = entry.find_all('td')[4].findAll(text=True)
+                if len(a) >= 4:
+                    text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
                 data.append(text)
             resp = jsonify(data)
             print("finished with good.")
