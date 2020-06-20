@@ -20,7 +20,6 @@ app = Flask(__name__)
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 app.logger.info("uh?")
 
-conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   'Cookie': 'PTGSESSID=3e5fc6ad522efacf8cb9dccca54e4f86; PTGSESSID=70409b185077aa87f60f7ca8ec339285'
@@ -113,11 +112,18 @@ def testpage():
 def course_api():
     # try:
     req = request.json
-
+    
     print("acquiring html...")
+    
     payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
     print(payload)
-    conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+    
+    try:
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+    except Exception as e:
+        conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        
     res = conn.getresponse()
     data = res.read().decode("utf-8")
     html = data.split('"#sr":"')[1].split("}}")[0]
