@@ -111,44 +111,44 @@ def testpage():
 
 @app.route("/api/course", methods=['POST'])
 def course_api():
-    try:
-        req = request.json
+    # try:
+    req = request.json
 
-        print("acquiring html...")
-        payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
-        print(payload)
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-        res = conn.getresponse()
-        data = res.read().decode("utf-8")
-        html = data.split('"#sr":"')[1].split("}}")[0]
-        s = html.replace("\\n", "\n").replace("\\", "")
-        print("acquired.")
-        print("collecting...")
-        soup = bs4(s, 'html.parser')
-        
-        if len(soup.find_all('tbody')) == 1:
-            data = []
-            for entry in soup.find('tbody').find_all('tr'):
-                text = {}
-                i = 0
-                for i in range(0, len(entry.find_all('td')) - 3):
-                    text[i] = entry.find_all('td')[i].text
-                a = entry.find_all('td')[4].findAll(text=True)
-                if len(a) >= 4:
-                    text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
-                data.append(text)
-            resp = jsonify(data)
-            print("finished with good.")
-        else:
-            resp = jsonify([{"bad": "true"}])
-            print("finished with bad.")
-        resp.status_code = 200
-        return resp
-    except Exception as e:
+    print("acquiring html...")
+    payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
+    print(payload)
+    conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+    res = conn.getresponse()
+    data = res.read().decode("utf-8")
+    html = data.split('"#sr":"')[1].split("}}")[0]
+    s = html.replace("\\n", "\n").replace("\\", "")
+    print("acquired.")
+    print("collecting...")
+    soup = bs4(s, 'html.parser')
+    
+    if len(soup.find_all('tbody')) == 1:
+        data = []
+        for entry in soup.find('tbody').find_all('tr'):
+            text = {}
+            i = 0
+            for i in range(0, len(entry.find_all('td')) - 3):
+                text[i] = entry.find_all('td')[i].text
+            a = entry.find_all('td')[4].findAll(text=True)
+            if len(a) >= 4:
+                text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
+            data.append(text)
+        resp = jsonify(data)
+        print("finished with good.")
+    else:
+        resp = jsonify([{"bad": "true"}])
+        print("finished with bad.")
+    resp.status_code = 200
+    return resp
+    """except Exception as e:
         resp = jsonify([{"bad": "true"}])
         print("finished with big bad.")
         resp.status_code = 200
-        return resp
+        return resp"""
 
 @app.route("/api/face", methods=['POST'])
 def detect_face():
