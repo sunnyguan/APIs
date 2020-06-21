@@ -40,6 +40,11 @@ def cookie_change():
         f = open(cookie_filename, "w")
         f.write(cookie_string)
         f.close()
+        global headers
+        headers = {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'Cookie': 'PTGSESSID=' + cookie_string
+        }
         return "<p>New cookie " + cookie_string + " successfully stored.</p>"
     except Exception as e:
         return "<h1>Error</h1>"
@@ -55,8 +60,25 @@ def homepage():
 <head>
    <title>My title</title>
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+   <style>
+        body {
+            max-width: 90%;
+        }
+        #d1 {
+            width: 60%;
+            float: left;
+        }
+        #d2 {
+            width: 40%;
+            float: right;
+        }
+        #sample {
+            max-height: 90vh;
+        }
+   </style>
    <script>
         function getText() {
+            alert("Image submitted; please wait.");
             var file = document.getElementById("img").files[0];
             var reader = new FileReader();
             reader.onloadend = function() {
@@ -67,14 +89,14 @@ def homepage():
                 xhr.onload = function () {
                     // do something to response
                     var p = JSON.parse(this.responseText);
-                    var tbl = "<table><tr><th>ID</th><th>Word</th><th>Confidence</th></tr>";
+                    var tbl = "<table><tr><th>ID</th><th>Word</th><th>Answer</th><th>Confidence</th><th>Correctness (/100)</th></tr>";
                     for (var key in p) {
                         if (p.hasOwnProperty(key)) {
-                            tbl += "<tr><td>" + key + "</td><td>" + p[key]["word"] + "</td><td>" + p[key]["confidence"] + "</td></tr>";
+                            tbl += "<tr><td>" + key + "</td><td>" + p[key]["word"] + "</td><td>" + p[key]["answer"] + "</td><td>" + p[key]["confidence"] + "</td><td>" + p[key]["dist"] + "</td></tr>";
                         }
                     }
                     tbl += "</table>";
-                    document.body.innerHTML += tbl;
+                    document.getElementById("d2").innerHTML = tbl;
                     console.log(tbl)
                 };
                 var inp = {"image": reader.result.split(',')[1]};
@@ -84,15 +106,18 @@ def homepage():
         }
    </script>
 </head>
-<body style="width: 880px; margin: auto;">  
-    <h1>Visible stuff goes here</h1>
-    <p>here's a paragraph, fwiw</p>
-    <p>And here's an image:</p>
-    <a href="https://www.flickr.com/photos/zokuga/14615349406/">
-        <img id="sample" src="http://stash.compjour.org/assets/images/sunset.jpg" alt="it's a nice sunset">
-    </a>
-    <input type="file" id="img" name="img" accept="image/*" onchange="document.getElementById('sample').src = window.URL.createObjectURL(this.files[0])">
-    <button onclick="getText()">Submit</button>
+<body style="width: 100%; margin: auto;">  
+    <div id="d1">
+        <h1>Homework OCR</h1>
+        <a>
+            <img id="sample">
+        </a>
+        <input type="file" id="img" name="img" accept="image/*" onchange="document.getElementById('sample').src = window.URL.createObjectURL(this.files[0])">
+        <button onclick="getText()">Submit</button>
+    </div>
+    <div id="d2">
+        
+    </div>
 </body>
 """
 
@@ -129,55 +154,55 @@ def testpage():
 
 @app.route("/api/course", methods=['POST'])
 def course_api():
-    # try:
-    req = request.json
-    
-    print("acquiring html...")
-    
-    payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
-    print(payload)
-    
     try:
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-    except Exception as e:
-        conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        req = request.json
         
-    res = conn.getresponse()
-    data = res.read().decode("utf-8")
-    html = data.split('"#sr":"')[1].split("}}")[0]
-    s = html.replace("\\n", "\n").replace("\\", "")
-    print("acquired.")
-    print("collecting...")
-    soup = bs4(s, 'html.parser')
-    
-    if len(soup.find_all('tbody')) == 1:
-        data = []
-        for entry in soup.find('tbody').find_all('tr'):
-            text = {}
-            i = 0
-            for i in range(0, len(entry.find_all('td')) - 3):
-                text[i] = entry.find_all('td')[i].text
-            a = entry.find_all('td')[4].findAll(text=True)
-            if len(a) >= 4:
-                text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
-            else:
-                text[4] = ""
-            data.append(text)
-        print(len(data))
-        resp = jsonify(data)
-        print("finished with good.")
-    else:
-        resp = jsonify([{"bad": "true"}])
-        print("finished with bad.")
-    resp.status_code = 200
-    return resp
-    """except Exception as e:
-        resp = jsonify([{"bad": "true"}])
+        print("acquiring html...")
+        
+        payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
+        print(payload)
+        
+        try:
+            conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        except Exception as e:
+            conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
+            conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+            
+        res = conn.getresponse()
+        data = res.read().decode("utf-8")
+        html = data.split('"#sr":"')[1].split("}}")[0]
+        s = html.replace("\\n", "\n").replace("\\", "")
+        print("acquired.")
+        print("collecting...")
+        soup = bs4(s, 'html.parser')
+        
+        if len(soup.find_all('tbody')) == 1:
+            data = []
+            for entry in soup.find('tbody').find_all('tr'):
+                text = {}
+                i = 0
+                for i in range(0, len(entry.find_all('td')) - 3):
+                    text[i] = entry.find_all('td')[i].text
+                a = entry.find_all('td')[4].findAll(text=True)
+                if len(a) >= 4:
+                    text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
+                else:
+                    text[4] = ""
+                data.append(text)
+            print(len(data))
+            resp = jsonify(data)
+            print("finished with good.")
+        else:
+            resp = jsonify([{"bad": "true"}])
+            print("finished with bad.")
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        resp = jsonify([{"bigbad": "true"}])
         print("finished with big bad.")
         resp.status_code = 200
-        return resp"""
-        
+        return resp
+
 @app.route("/api/face", methods=['POST'])
 def detect_face():
     try:
@@ -283,6 +308,7 @@ def getWords():
 
     text_recognition_url = endpoint + "/vision/v3.0/read/analyze"
     image_data = open("concatted2.jpg", "rb").read()
+    
     headers = {'Ocp-Apim-Subscription-Key': subscription_key,
             'Content-Type': 'application/octet-stream'}
     response = requests.post(text_recognition_url, headers=headers, data=image_data)
@@ -308,16 +334,17 @@ def getWords():
     key = ['roughly symetrical', 'aproximately', 'is greater than', 'is less than', 'scaled', 'labeled', 'typical', 'mean', 'distribution', 'appoximately Normal', 'bias', 'sampling', 'random assignment', 'group']
 
     text = {}
-    idx = 0
+    idx = 1
     if ("analyzeResult" in analysis):
         for line in analysis["analyzeResult"]["readResults"][0]["lines"]:
-            seq = difflib.SequenceMatcher(None,key[idx],line["text"])
+            seq = difflib.SequenceMatcher(None,key[idx-1],line["text"])
             conf = 0
             for word in line["words"]:
                 conf += word["confidence"]
             conf = conf / len(line["words"])
-            # print(line["text"] + " --- confidence: " + str(conf) + ", distance: " + str(seq.quick_ratio() * 100))
-            text[idx] = {"word": line["text"], "confidence":str(conf)}
+            conf = round(conf, 3)
+            dist = str(round(seq.quick_ratio() * 100, 3))
+            text[idx] = {"word": line["text"], "confidence":str(conf), "answer":key[idx-1], "dist":dist}
             idx += 1
     return text
     
