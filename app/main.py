@@ -40,7 +40,6 @@ def cookie_change():
         f = open(cookie_filename, "w")
         f.write(cookie_string)
         f.close()
-        global headers
         headers = {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Cookie': 'PTGSESSID=' + cookie_string
@@ -154,54 +153,55 @@ def testpage():
 
 @app.route("/api/course", methods=['POST'])
 def course_api():
+    # try:
+    req = request.json
+    
+    print("acquiring html...")
+    
+    payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
+    print(payload)
+    
     try:
-        req = request.json
-        
-        print("acquiring html...")
-        
-        payload = "action=search&s[]=" + req["query"] + "&s[]=term_20f"
-        print(payload)
-        
-        try:
-            conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-        except Exception as e:
-            conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
-            conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-            
-        res = conn.getresponse()
-        data = res.read().decode("utf-8")
-        html = data.split('"#sr":"')[1].split("}}")[0]
-        s = html.replace("\\n", "\n").replace("\\", "")
-        print("acquired.")
-        print("collecting...")
-        soup = bs4(s, 'html.parser')
-        
-        if len(soup.find_all('tbody')) == 1:
-            data = []
-            for entry in soup.find('tbody').find_all('tr'):
-                text = {}
-                i = 0
-                for i in range(0, len(entry.find_all('td')) - 3):
-                    text[i] = entry.find_all('td')[i].text
-                a = entry.find_all('td')[4].findAll(text=True)
-                if len(a) >= 4:
-                    text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
-                else:
-                    text[4] = ""
-                data.append(text)
-            print(len(data))
-            resp = jsonify(data)
-            print("finished with good.")
-        else:
-            resp = jsonify([{"bad": "true"}])
-            print("finished with bad.")
-        resp.status_code = 200
-        return resp
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
     except Exception as e:
+        conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        
+    res = conn.getresponse()
+    data = res.read().decode("utf-8")
+    print("cookie: " + cookie_string + " data: " + data)
+    html = data.split('"#sr":"')[1].split("}}")[0]
+    s = html.replace("\\n", "\n").replace("\\", "")
+    print("acquired.")
+    print("collecting...")
+    soup = bs4(s, 'html.parser')
+    
+    if len(soup.find_all('tbody')) == 1:
+        data = []
+        for entry in soup.find('tbody').find_all('tr'):
+            text = {}
+            i = 0
+            for i in range(0, len(entry.find_all('td')) - 3):
+                text[i] = entry.find_all('td')[i].text
+            a = entry.find_all('td')[4].findAll(text=True)
+            if len(a) >= 4:
+                text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
+            else:
+                text[4] = ""
+            data.append(text)
+        print(len(data))
+        resp = jsonify(data)
+        print("finished with good.")
+    else:
+        resp = jsonify([{"bad": "true"}])
+        print("finished with bad.")
+    resp.status_code = 200
+    return resp
+    """except Exception as e:
         resp = jsonify([{"bigbad": "true"}])
         print("finished with big bad.")
         resp.status_code = 200
-        return resp
+        return resp"""
 
 @app.route("/api/face", methods=['POST'])
 def detect_face():
