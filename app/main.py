@@ -186,6 +186,7 @@ def course_api2():
         for entry in soup.find('tbody').find_all('tr'):
             text = {}
             text["id"] = 100 + i;
+            i += 1
             text["name"] = entry.find_all('td')[2].text + " " + entry.find_all('td')[3].text.strip()
             data.append(text)
         print(len(data))
