@@ -16,6 +16,7 @@ requests = "*"
 imutils = "*"
 random-user-agent = "*"
 beautifulsoup4 = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"

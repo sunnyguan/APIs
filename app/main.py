@@ -1,5 +1,6 @@
 import base64
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import numpy as np
 import cv2
 import json
@@ -18,6 +19,9 @@ import logging
 from bs4 import BeautifulSoup as bs4
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 app.logger.info("uh?")
 
@@ -151,6 +155,7 @@ def testpage():
 """
 
 @app.route("/api/coursetest", methods=['GET'])
+@cross_origin()
 def course_api2():
     # try:
     req = request.json
@@ -198,6 +203,7 @@ def course_api2():
         return resp"""
 
 @app.route("/api/course", methods=['POST'])
+@cross_origin()
 def course_api():
     # try:
     req = request.json
