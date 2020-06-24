@@ -150,6 +150,52 @@ def testpage():
 </body>
 """
 
+@app.route("/api/coursetest", methods=['GET'])
+def course_api2():
+    # try:
+    req = request.json
+    
+    print("acquiring html...")
+    
+    payload = "action=search&s[]=" + request.args.get('query') + "&s[]=term_20f"
+    print(payload)
+    
+    try:
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+    except Exception as e:
+        conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
+        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        
+    res = conn.getresponse()
+    data = res.read().decode("utf-8")
+    print("cookie: " + cookie_string + " data: " + data)
+    html = data.split('"#sr":"')[1].split("}}")[0]
+    s = html.replace("\\n", "\n").replace("\\", "")
+    print("acquired.")
+    print("collecting...")
+    soup = bs4(s, 'html.parser')
+    
+    if len(soup.find_all('tbody')) == 1:
+        data = []
+        i = 0
+        for entry in soup.find('tbody').find_all('tr'):
+            text = {}
+            text["id"] = 100 + i;
+            text["name"] = entry.find_all('td')[2].text + " " + entry.find_all('td')[3].text.strip()
+            data.append(text)
+        print(len(data))
+        resp = jsonify(data)
+        print("finished with good.")
+    else:
+        resp = jsonify([{"bad": "true"}])
+        print("finished with bad.")
+    resp.status_code = 200
+    return resp
+    """except Exception as e:
+        resp = jsonify([{"bigbad": "true"}])
+        print("finished with big bad.")
+        resp.status_code = 200
+        return resp"""
 
 @app.route("/api/course", methods=['POST'])
 def course_api():
