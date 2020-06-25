@@ -154,6 +154,8 @@ def testpage():
 </body>
 """
 
+url = "http://utdrmp.herokuapp.com/api/rmp?names="
+
 @app.route("/api/coursetest", methods=['GET'])
 @cross_origin()
 def course_api2():
@@ -189,6 +191,15 @@ def course_api2():
             text["sid"] = entry.find_all('td')[1].text[:-5].replace('.', ' ')
             text["name"] = entry.find_all('td')[2].text;
             text["professor"] = entry.find_all('td')[3].text.strip();
+            
+            newUrl = url + text["professor"]
+            response = requests.request("GET", newUrl, headers={}, data = {})
+            resps = response.text.encode('utf8')
+            json_array = json.loads(resps)[0]
+            if json_array["name"] != "N/A":
+                text["professor_rating"] = json_array["rating"]
+                text["professor_link"] = json_array["link"]
+            
             a = entry.find_all('td')[4].findAll(text=True)
             if len(a) >= 4:
                 text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
