@@ -155,6 +155,7 @@ def testpage():
 """
 
 url = "http://utdrmp.herokuapp.com/api/rmp?names="
+# url = "http://localhost:8080/api/rmp?names="
 
 @app.route("/api/coursetest", methods=['GET'])
 @cross_origin()
@@ -175,7 +176,7 @@ def course_api2():
         
     res = conn.getresponse()
     data = res.read().decode("utf-8")
-    print("cookie: " + cookie_string + " data: " + data)
+    print("cookie: " + cookie_string)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
@@ -196,6 +197,7 @@ def course_api2():
             response = requests.request("GET", newUrl, headers={}, data = {})
             resps = response.text.encode('utf8')
             json_array = json.loads(resps)[0]
+            text["professor_gpa"] = json_array["avgGPA"]
             if json_array["name"] != "N/A":
                 text["professor_rating"] = json_array["rating"]
                 text["professor_link"] = json_array["link"]
