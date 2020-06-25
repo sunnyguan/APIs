@@ -200,8 +200,8 @@ def course_api2():
                 text["professor_rating"] = json_array["rating"]
                 text["professor_link"] = json_array["link"]
             else:
-                text["professor_rating"] = "N/A"
-                text["professor_link"] = "N/A"
+                text["professor_rating"] = "0 (N/A)"
+                text["professor_link"] = "0 (N/A)"
             
             a = entry.find_all('td')[4].findAll(text=True)
             if len(a) >= 4:
