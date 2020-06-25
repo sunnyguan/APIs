@@ -154,7 +154,7 @@ def testpage():
 </body>
 """
 
-url = "http://utdrmp.herokuapp.com/api/rmp?names="
+url = "http://utdrmp.herokuapp.com/api/rmp?"
 # url = "http://localhost:8080/api/rmp?names="
 
 @app.route("/api/coursetest", methods=['GET'])
@@ -185,6 +185,7 @@ def course_api2():
     
     if len(soup.find_all('tbody')) == 1:
         data = []
+        totalQuery = url
         i = 0
         for entry in soup.find('tbody').find_all('tr'):
             text = {}
@@ -192,25 +193,31 @@ def course_api2():
             text["sid"] = entry.find_all('td')[1].text[:-5].replace('.', ' ')
             text["name"] = entry.find_all('td')[2].text;
             text["professor"] = entry.find_all('td')[3].text.strip();
-            
-            newUrl = url + text["professor"]
-            response = requests.request("GET", newUrl, headers={}, data = {})
-            resps = response.text.encode('utf8')
-            json_array = json.loads(resps)[0]
-            text["professor_gpa"] = json_array["avgGPA"]
-            if json_array["name"] != "N/A":
-                text["professor_rating"] = json_array["rating"]
-                text["professor_link"] = json_array["link"]
-            else:
-                text["professor_rating"] = "0 Records Found"
-                text["professor_link"] = "0 Records Found"
-            
+            totalQuery += "names=" + text["professor"] + "&"
+
             a = entry.find_all('td')[4].findAll(text=True)
             if len(a) >= 4:
                 text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
             else:
                 text["time"] = ""
             data.append(text)
+        
+        response = requests.request("GET", totalQuery, headers={}, data = {})
+        resps = response.text.encode('utf8')
+        
+        resp_arr = json.loads(resps)
+        inx = 0
+        for inx in range(0,len(resp_arr)):
+            json_array = resp_arr[inx]
+            # print(json_array)
+            data[inx]["professor_gpa"] = json_array["avgGPA"]
+            if json_array["name"] != "N/A":
+                data[inx]["professor_rating"] = json_array["rating"]
+                data[inx]["professor_link"] = json_array["link"]
+            else:
+                data[inx]["professor_rating"] = "0 Records Found"
+                data[inx]["professor_link"] = "0 Records Found"
+            
         print(len(data))
         if request.args.get('single') == "true":
             data = data[0]
