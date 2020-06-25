@@ -199,6 +199,9 @@ def course_api2():
             if json_array["name"] != "N/A":
                 text["professor_rating"] = json_array["rating"]
                 text["professor_link"] = json_array["link"]
+            else:
+                text["professor_rating"] = "N/A"
+                text["professor_link"] = "N/A"
             
             a = entry.find_all('td')[4].findAll(text=True)
             if len(a) >= 4:
