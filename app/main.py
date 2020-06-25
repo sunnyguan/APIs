@@ -185,11 +185,19 @@ def course_api2():
         i = 0
         for entry in soup.find('tbody').find_all('tr'):
             text = {}
-            text["id"] = 100 + i;
-            i += 1
-            text["name"] = entry.find_all('td')[2].text + " " + entry.find_all('td')[3].text.strip()
+            text["id"] = entry.find_all('td')[1].text[-5:];
+            text["sid"] = entry.find_all('td')[1].text[:-5].replace('.', ' ')
+            text["name"] = entry.find_all('td')[2].text;
+            text["professor"] = entry.find_all('td')[3].text.strip();
+            a = entry.find_all('td')[4].findAll(text=True)
+            if len(a) >= 4:
+                text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
+            else:
+                text["time"] = ""
             data.append(text)
         print(len(data))
+        if request.args.get('single') == "true":
+            data = data[0]
         resp = jsonify(data)
         print("finished with good.")
     else:
