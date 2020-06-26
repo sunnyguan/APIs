@@ -38,7 +38,7 @@ headers = {
   'Cookie': 'PTGSESSID=' + cookie_string
 }
 
-text_file = open("courses.txt", "r")
+text_file = open("courseCombine.txt", "r")
 courses = text_file.read().split("\n")
 text_file.close()
 
@@ -166,7 +166,7 @@ url = "http://utdrmp.herokuapp.com/api/rmp?"
 @cross_origin()
 def smartSearch():
     payload = request.args.get('query').upper()
-    filtered = ({"name":a} for a in courses if a.upper().startswith(payload))
+    filtered = ({"name":a.split(";")[0], "sid":a.split(";")[1]} for a in courses if payload in a.upper())
     result = list(islice(filtered, 10))
     # print(result)
     resp = jsonify(result)
