@@ -16,6 +16,7 @@ import imutils
 import http.client
 import mimetypes
 import logging
+from itertools import islice
 from bs4 import BeautifulSoup as bs4
 
 app = Flask(__name__)
@@ -36,6 +37,10 @@ headers = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   'Cookie': 'PTGSESSID=' + cookie_string
 }
+
+text_file = open("courses.txt", "r")
+courses = text_file.read().split("\n")
+text_file.close()
 
 @app.route("/change_cookie")
 def cookie_change():
@@ -156,6 +161,16 @@ def testpage():
 
 url = "http://utdrmp.herokuapp.com/api/rmp?"
 # url = "http://localhost:8080/api/rmp?names="
+
+@app.route("/api/smart", methods=['GET'])
+@cross_origin()
+def smartSearch():
+    payload = request.args.get('query').upper()
+    filtered = ({"name":a} for a in courses if a.upper().startswith(payload))
+    result = list(islice(filtered, 10))
+    # print(result)
+    resp = jsonify(result)
+    return resp
 
 @app.route("/api/coursetest", methods=['GET'])
 @cross_origin()
