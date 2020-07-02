@@ -204,8 +204,9 @@ def course_api2():
         i = 0
         for entry in soup.find('tbody').find_all('tr'):
             text = {}
-            text["id"] = entry.find_all('td')[1].text[-5:];
-            text["sid"] = entry.find_all('td')[1].text[:-5].replace('.', ' ')
+            arry = entry.find_all('td')[1].find('a').text.split('.')
+            text["id"] = arry[1];
+            text["sid"] = arry[0]
             text["name"] = entry.find_all('td')[2].text;
             text["professor"] = entry.find_all('td')[3].text.strip();
             totalQuery += "names=" + text["professor"] + "&"
