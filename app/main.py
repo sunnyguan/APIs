@@ -191,7 +191,7 @@ def course_api2():
         
     res = conn.getresponse()
     data = res.read().decode("utf-8")
-    print("cookie: " + cookie_string)
+    # print("cookie: " + cookie_string)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
@@ -236,7 +236,7 @@ def course_api2():
                 data[inx]["professor_rating"] = "0 Records Found"
                 data[inx]["professor_link"] = "0 Records Found"
             
-        print(len(data))
+        # print(len(data))
         if request.args.get('single') == "true":
             data = data[0]
         resp = jsonify(data)
@@ -271,7 +271,7 @@ def course_api():
         
     res = conn.getresponse()
     data = res.read().decode("utf-8")
-    print("cookie: " + cookie_string + " data: " + data)
+    # print("cookie: " + cookie_string + " data: " + data)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
@@ -290,6 +290,7 @@ def course_api():
                 text[4] = a[0] + '\n' + a[1] + '\n' + a[3]
             else:
                 text[4] = ""
+            text[5] = entry.find_all('td')[1].find(text=True, recursive=False).strip()
             data.append(text)
         print(len(data))
         resp = jsonify(data)
