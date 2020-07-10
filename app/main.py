@@ -204,14 +204,16 @@ def course_api2():
         i = 0
         for entry in soup.find('tbody').find_all('tr'):
             text = {}
-            arry = entry.find_all('td')[1].find('a').text.split('.')
-            text["id"] = arry[1];
+            all_td = entry.find_all('td')
+            arry = all_td[1].find('a').text.split('.')
+            text["id"] = arry[1]
             text["sid"] = arry[0]
-            text["name"] = entry.find_all('td')[2].text;
-            text["professor"] = entry.find_all('td')[3].text.strip();
+            text["name"] = all_td[2].text;
+            text["status"] = all_td[1].find(text=True, recursive=False).strip()
+            text["professor"] = all_td[3].text.strip();
             totalQuery += "names=" + text["professor"] + "&"
 
-            a = entry.find_all('td')[4].findAll(text=True)
+            a = all_td[4].findAll(text=True)
             if len(a) >= 4:
                 text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
             else:
