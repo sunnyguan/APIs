@@ -203,6 +203,8 @@ def get_query(query):
         text["name"] = all_td[2].text;
         text["status"] = all_td[1].find(text=True, recursive=False).strip()
         text["professor"] = all_td[3].text.strip();
+        if(text["professor"] == "Ivor Page"):
+            text["status"] = "Remote/Virtual Learning"
         totalQuery += "names=" + text["professor"] + "&"
         a = all_td[4].findAll(text=True)
         if len(a) >= 4:
