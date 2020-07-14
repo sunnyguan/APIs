@@ -214,6 +214,7 @@ def get_query(query):
         data.append(text)
     response = requests.request("GET", totalQuery, headers={}, data = {})
     resps = response.text.encode('utf8')
+    # print(resps)
     resp_arr = json.loads(resps)
     inx = 0
     for inx in range(0,len(resp_arr)):
@@ -232,27 +233,26 @@ def get_query(query):
     # resp.status_code = 200
     return data
 
-@app.route("/api/coursetest", methods=['GET'])
-@cross_origin()
-def course_api2():
-    data = get_query(request.args.get('query'))
+def get_queries(queries):
+    data = []
+    for query in queries:
+        data = data + get_query(query.strip())
     resp = jsonify(data)
     print("finished with good.")
     resp.status_code = 200
     return resp
+
+@app.route("/api/coursetest", methods=['GET'])
+@cross_origin()
+def course_api2():
+    return get_queries(request.args.getlist('query'))
 
 my_classes = ["cs1200.hon.20f", "cs3341.hon.20f", "cs3345.hon.20f", "ecs1100.005.20f", "govt2306.006.20f", "math3323.001.20f", "musi3120.501.20f", "univ1010.001.20f"]
 
 @app.route("/api/schedule", methods=['GET'])
 @cross_origin()
 def schedule():
-    data = []
-    for query in my_classes: 
-        data = data + get_query(query)
-    resp = jsonify(data)
-    print("finished with good.")
-    resp.status_code = 200
-    return resp
+    return get_queries(my_classes)
 
 @app.route("/api/course", methods=['POST'])
 @cross_origin()
