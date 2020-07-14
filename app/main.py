@@ -172,85 +172,85 @@ def smartSearch():
     resp = jsonify(result)
     return resp
 
-@app.route("/api/coursetest", methods=['GET'])
-@cross_origin()
-def course_api2():
-    # try:
-    req = request.json
-    
+def get_query(query):
     print("acquiring html...")
-    
-    payload = "action=search&s[]=" + request.args.get('query') + "&s[]=term_20f"
+    payload = "action=search&s[]=" + query + "&s[]=term_20f"
     print(payload)
-    
     try:
         conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
     except Exception as e:
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
         conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-        
     res = conn.getresponse()
     data = res.read().decode("utf-8")
-    # print("cookie: " + cookie_string)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
     print("collecting...")
     soup = bs4(s, 'html.parser')
-    
-    if len(soup.find_all('tbody')) == 1:
-        data = []
-        totalQuery = url
-        i = 0
-        for entry in soup.find('tbody').find_all('tr'):
-            text = {}
-            all_td = entry.find_all('td')
-            arry = all_td[1].find('a').text.split('.')
-            text["id"] = arry[1]
-            text["sid"] = arry[0]
-            text["name"] = all_td[2].text;
-            text["status"] = all_td[1].find(text=True, recursive=False).strip()
-            text["professor"] = all_td[3].text.strip();
-            totalQuery += "names=" + text["professor"] + "&"
+    if len(soup.find_all('tbody')) != 1:
+        return []
+        
+    data = []
+    totalQuery = url
+    i = 0
+    for entry in soup.find('tbody').find_all('tr'):
+        text = {}
+        all_td = entry.find_all('td')
+        arry = all_td[1].find('a').text.split('.')
+        text["id"] = arry[1]
+        text["sid"] = arry[0]
+        text["name"] = all_td[2].text;
+        text["status"] = all_td[1].find(text=True, recursive=False).strip()
+        text["professor"] = all_td[3].text.strip();
+        totalQuery += "names=" + text["professor"] + "&"
+        a = all_td[4].findAll(text=True)
+        if len(a) >= 4:
+            text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
+        else:
+            text["time"] = ""
+        data.append(text)
+    response = requests.request("GET", totalQuery, headers={}, data = {})
+    resps = response.text.encode('utf8')
+    resp_arr = json.loads(resps)
+    inx = 0
+    for inx in range(0,len(resp_arr)):
+        json_array = resp_arr[inx]
+        data[inx]["professor_gpa"] = json_array["avgGPA"]
+        if json_array["name"] != "N/A":
+            data[inx]["professor_rating"] = json_array["rating"]
+            data[inx]["professor_link"] = json_array["link"]
+        else:
+            data[inx]["professor_rating"] = "0 Records Found"
+            data[inx]["professor_link"] = "0 Records Found"
+    if request.args.get('single') == "true":
+        data = data[0]
+    # resp = jsonify(data)
+    # print("finished with good.")
+    # resp.status_code = 200
+    return data
 
-            a = all_td[4].findAll(text=True)
-            if len(a) >= 4:
-                text["time"] = a[0] + '\n' + a[1] + '\n' + a[3]
-            else:
-                text["time"] = ""
-            data.append(text)
-        
-        response = requests.request("GET", totalQuery, headers={}, data = {})
-        resps = response.text.encode('utf8')
-        
-        resp_arr = json.loads(resps)
-        inx = 0
-        for inx in range(0,len(resp_arr)):
-            json_array = resp_arr[inx]
-            # print(json_array)
-            data[inx]["professor_gpa"] = json_array["avgGPA"]
-            if json_array["name"] != "N/A":
-                data[inx]["professor_rating"] = json_array["rating"]
-                data[inx]["professor_link"] = json_array["link"]
-            else:
-                data[inx]["professor_rating"] = "0 Records Found"
-                data[inx]["professor_link"] = "0 Records Found"
-            
-        # print(len(data))
-        if request.args.get('single') == "true":
-            data = data[0]
-        resp = jsonify(data)
-        print("finished with good.")
-    else:
-        resp = jsonify([{"bad": "true"}])
-        print("finished with bad.")
+@app.route("/api/coursetest", methods=['GET'])
+@cross_origin()
+def course_api2():
+    data = get_query(request.args.get('query'))
+    resp = jsonify(data)
+    print("finished with good.")
     resp.status_code = 200
     return resp
-    """except Exception as e:
-        resp = jsonify([{"bigbad": "true"}])
-        print("finished with big bad.")
-        resp.status_code = 200
-        return resp"""
+
+my_classes = ["cs1200.hon.20f", "cs3341.hon.20f", "cs3345.hon.20f", "ecs1100.005.20f", "govt2306.006.20f", "math3323.001.20f", "musi3120.501.20f", "univ1010.001.20f"]
+
+@app.route("/api/schedule", methods=['GET'])
+@cross_origin()
+def schedule():
+    data = []
+    for query in my_classes: 
+        data = data + get_query(query)
+    resp = jsonify(data)
+    print("finished with good.")
+    resp.status_code = 200
+    return resp
 
 @app.route("/api/course", methods=['POST'])
 @cross_origin()
