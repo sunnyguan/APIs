@@ -182,7 +182,9 @@ def get_query(query):
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
         conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
     res = conn.getresponse()
+    
     data = res.read().decode("utf-8")
+    print(data)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
