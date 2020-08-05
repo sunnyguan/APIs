@@ -92,7 +92,8 @@ def upload_file():
             courses = read_pdf.getPage(0).extractText()
             # courses = courses.split("2020 Fall")[1]
             print(courses)
-            res = re.findall(r"[A-Z]+ [0-9]+", courses)
+            res = re.findall(r"([A-Z]+ [0-9]+)([^\.]*)", courses)
+            res = [(a + ' ' + b[:-1].title()) for (a, b) in res]
             resp = jsonify(res)
             return resp
             """return redirect(url_for('uploaded_file',
