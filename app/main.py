@@ -86,9 +86,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join('tmp/', filename))
             
-            read_pdf = PdfFileReader('app/uploads/' + filename)
+            read_pdf = PdfFileReader('tmp/' + filename)
             courses = read_pdf.getPage(0).extractText()
             # courses = courses.split("2020 Fall")[1]
             print(courses)
@@ -110,7 +110,7 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    read_pdf = PdfFileReader('app/uploads/' + filename)
+    read_pdf = PdfFileReader('app/tmp/' + filename)
     courses = read_pdf.getPage(0).extractText()
     res = courses.split("2020 Fall")[0].findall(r"[A-Z]+ [0-9]+")
     resp = jsonify(res)
