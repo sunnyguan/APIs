@@ -1,11 +1,13 @@
 import base64
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, flash, redirect, url_for, send_from_directory
+from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 import numpy as np
 import cv2
 import json
 import os
 import os.path
+import re
 import atexit
 import sys
 import requests
@@ -18,6 +20,7 @@ import mimetypes
 import logging
 from itertools import islice
 from bs4 import BeautifulSoup as bs4
+from PyPDF2 import PdfFileReader
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -60,6 +63,58 @@ def cookie_change():
 @app.route("/hello")
 def home_view():
     return "<h1>Hello World!</h1>"
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = 'app/uploads'
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/', methods=['GET', 'POST'])
+@cross_origin()
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        print(request.files)
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+            read_pdf = PdfFileReader('app/uploads/' + filename)
+            courses = read_pdf.getPage(0).extractText()
+            # courses = courses.split("2020 Fall")[1]
+            print(courses)
+            res = re.findall(r"[A-Z]+ [0-9]+", courses)
+            resp = jsonify(res)
+            return resp
+            """return redirect(url_for('uploaded_file',
+                                    filename=filename))"""
+                                    
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input id=file type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    read_pdf = PdfFileReader('app/uploads/' + filename)
+    courses = read_pdf.getPage(0).extractText()
+    res = courses.split("2020 Fall")[0].findall(r"[A-Z]+ [0-9]+")
+    resp = jsonify(res)
+    return resp
 
 @app.route('/ocr')
 def homepage():
@@ -129,7 +184,7 @@ def homepage():
 </body>
 """
 
-@app.route('/')
+@app.route('/testOCR')
 def testpage():
     return """
 <!DOCTYPE html>
