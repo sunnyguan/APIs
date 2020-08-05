@@ -86,9 +86,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join('/tmp', filename))
+            file.save(os.path.join('/tmp/', filename))
             
-            read_pdf = PdfFileReader('/tmp' + filename)
+            read_pdf = PdfFileReader('/tmp/' + filename)
             courses = read_pdf.getPage(0).extractText()
             # courses = courses.split("2020 Fall")[1]
             print(courses)
