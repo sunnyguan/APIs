@@ -69,7 +69,7 @@ app.config['UPLOAD_FOLDER'] = 'app/uploads'
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/api/pdfParse', methods=['GET', 'POST'])
 @cross_origin()
 def upload_file():
     if request.method == 'POST':
@@ -92,6 +92,7 @@ def upload_file():
             courses = read_pdf.getPage(0).extractText()
             # courses = courses.split("2020 Fall")[1]
             print(courses)
+            
             res = re.findall(r"([A-Z]+ [0-9]+)([^\.]*)", courses)
             res = [(a + ' ' + b[:-1].title()) for (a, b) in res]
             resp = jsonify(res)
