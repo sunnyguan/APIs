@@ -27,15 +27,9 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
-app.logger.info("uh?")
 
-cookie_filename="cookie.txt"
-cookie_string="3e5fc6ad522efacf8cb9dccca54e4f86"
-if os.path.isfile(cookie_filename):
-    f = open(cookie_filename, "r")
-    cookie_string = f.read().strip()
-    f.close()
-
+cookie_string="f0323dafcfaf33a13305fd2039b96c02"
+# cookie_string="a932166bb57aff99a121259288de5571"
 headers = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   'Cookie': 'PTGSESSID=' + cookie_string
@@ -48,7 +42,7 @@ text_file.close()
 @app.route("/change_cookie")
 def cookie_change():
     try:
-        cookie_string = request.args.get('cookie').strip()
+        """cookie_string = request.args.get('cookie').strip()
         f = open(cookie_filename, "w")
         f.write(cookie_string)
         f.close()
@@ -56,9 +50,15 @@ def cookie_change():
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Cookie': 'PTGSESSID=' + cookie_string
         }
+        return "<p>New cookie " + cookie_string + " successfully stored.</p>"""
+        url = 'https://coursebook.utdallas.edu/'
+        response = requests.get(url)
+        str = response.headers['Set-Cookie']
+        cookie_string = re.findall('PTGSESSID=([^;]*)', str)[0]
         return "<p>New cookie " + cookie_string + " successfully stored.</p>"
     except Exception as e:
         return "<h1>Error</h1>"
+# cookie_change()
 
 @app.route("/hello")
 def home_view():
@@ -256,7 +256,9 @@ def get_query(query):
     for entry in soup.find('tbody').find_all('tr'):
         text = {}
         all_td = entry.find_all('td')
+        all_td.pop(0) # CB added hidden element on 8/12/2020
         arry = all_td[1].find('a').text.split('.')
+        text["open"] = "Open" if "Open" in all_td[0].text else "Full"
         text["id"] = arry[1]
         text["sid"] = arry[0]
         text["name"] = all_td[2].text;
@@ -273,7 +275,7 @@ def get_query(query):
         data.append(text)
     response = requests.request("GET", totalQuery, headers={}, data = {})
     resps = response.text.encode('utf8')
-    # print(resps)
+    print(resps)
     resp_arr = json.loads(resps)
     inx = 0
     for inx in range(0,len(resp_arr)):
