@@ -234,7 +234,10 @@ def uploaded_file(filename):
    
 @app.route('/converted/<filename>')
 def upload_convert(filename):
-    return send_from_directory('../' + save_dir, filename)
+    upload_path = '../' + save_dir
+    if save_dir == '/tmp/':
+        upload_path = save_dir
+    return send_from_directory(upload_path, filename)
 
 @app.route('/ocr')
 def homepage():
