@@ -73,7 +73,7 @@ app.config['UPLOAD_FOLDER'] = 'app/uploads'
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-save_dir = 'tmp/' # '/tmp/'
+save_dir = '/tmp/' # '/tmp/'
 
 @app.route('/api/convert', methods=['GET', 'POST'])
 def convertFile():
