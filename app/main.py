@@ -21,6 +21,10 @@ import logging
 from itertools import islice
 from bs4 import BeautifulSoup as bs4
 from PyPDF2 import PdfFileReader
+from PIL import Image
+from flask import send_from_directory, Response
+import PIL
+import functools
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -69,6 +73,116 @@ app.config['UPLOAD_FOLDER'] = 'app/uploads'
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+save_dir = 'tmp/' # '/tmp/'
+
+@app.route('/api/convert', methods=['GET', 'POST'])
+def convertFile():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        files = request.files.getlist("file")
+        flags = request.form.getlist('flags')
+        print(request.files)
+        imList = []
+        if len(files) >= 1:
+            for file in files:
+                # if user does not select file, browser also
+                # submit an empty part without filename
+                if file.filename == '':
+                    flash('No selected file')
+                    return redirect(request.url)
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    all_path = os.path.join(save_dir, filename)
+                    file.save(all_path)
+                    imList.append(all_path)
+            processFiles(imList, flags)
+            return redirect(url_for('upload_convert',
+                                    filename='all.pdf'))
+        else:
+            return '''
+            <!doctype html>
+            <title>Pictures to PDF</title>
+            <h1>Upload Files</h1>
+            <p>At least one file required!</p>
+            <form method=post enctype=multipart/form-data>
+              <input id=file type=file name=file multiple=>
+              <input type=submit value=Upload>
+            </form>
+            '''             
+    return '''
+    <!doctype html>
+    
+    <title>Pictures to PDF</title>
+    <h1>Upload Files</h1>
+    <form method=post enctype=multipart/form-data>
+      <input id=file type=file name=file multiple>
+      <label>Same size:
+      <input type=checkbox name=flags value=sameSize>
+      </label>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+def processFiles(files, flags):
+    print(flags)
+    imgs = [image_transpose_exif(rgbaToRgb(file)) for file in files]
+    for file in files:
+        os.remove(file)
+    min_shape = sorted( [(np.sum(i.size), i.size ) for i in imgs])[0][1]
+    imgs_comb = []
+    if 'sameSize' in flags:
+        imgs_comb = [i.resize(min_shape) for i in imgs]
+    else:
+        imgs_comb = imgs
+
+    imgs_comb[0].save( save_dir + 'all.pdf', save_all=True, append_images=imgs_comb[1:])
+
+def image_transpose_exif(im):
+    """
+    Apply Image.transpose to ensure 0th row of pixels is at the visual
+    top of the image, and 0th column is the visual left-hand side.
+    Return the original image if unable to determine the orientation.
+
+    As per CIPA DC-008-2012, the orientation field contains an integer,
+    1 through 8. Other values are reserved.
+
+    Parameters
+    ----------
+    im: PIL.Image
+       The image to be rotated.
+    """
+
+    exif_orientation_tag = 0x0112
+    exif_transpose_sequences = [                   # Val  0th row  0th col
+        [],                                        #  0    (reserved)
+        [],                                        #  1   top      left
+        [Image.FLIP_LEFT_RIGHT],                   #  2   top      right
+        [Image.ROTATE_180],                        #  3   bottom   right
+        [Image.FLIP_TOP_BOTTOM],                   #  4   bottom   left
+        [Image.FLIP_LEFT_RIGHT, Image.ROTATE_90],  #  5   left     top
+        [Image.ROTATE_270],                        #  6   right    top
+        [Image.FLIP_TOP_BOTTOM, Image.ROTATE_90],  #  7   right    bottom
+        [Image.ROTATE_90],                         #  8   left     bottom
+    ]
+
+    try:
+        seq = exif_transpose_sequences[im._getexif()[exif_orientation_tag]]
+    except Exception:
+        return im
+    else:
+        return functools.reduce(type(im).transpose, seq, im)
+
+def rgbaToRgb(filename):
+    rgba = Image.open(filename)
+    if len(rgba.split()) == 4:
+        rgb = Image.new('RGB', rgba.size, (255, 255, 255))
+        rgb.paste(rgba, mask=rgba.split()[3])
+        return rgb
+    return rgba
+
 @app.route('/api/pdfParse', methods=['GET', 'POST'])
 @cross_origin()
 def upload_file():
@@ -86,9 +200,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join('/tmp/', filename))
+            file.save(os.path.join(save_dir, filename))
             
-            read_pdf = PdfFileReader('/tmp/' + filename)
+            read_pdf = PdfFileReader(save_dir + filename)
             courses = read_pdf.getPage(0).extractText()
             # courses = courses.split("2020 Fall")[1]
             print(courses)
@@ -112,11 +226,15 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    read_pdf = PdfFileReader('app/tmp/' + filename)
+    read_pdf = PdfFileReader(save_dir + filename)
     courses = read_pdf.getPage(0).extractText()
     res = courses.split("2020 Fall")[0].findall(r"[A-Z]+ [0-9]+")
     resp = jsonify(res)
     return resp
+   
+@app.route('/converted/<filename>')
+def upload_convert(filename):
+    return send_from_directory('../' + save_dir, filename)
 
 @app.route('/ocr')
 def homepage():

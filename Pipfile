@@ -18,6 +18,7 @@ random-user-agent = "*"
 beautifulsoup4 = "*"
 flask-cors = "*"
 pypdf2 = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
