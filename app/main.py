@@ -35,8 +35,20 @@ faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 cookie_string="f0323dafcfaf33a13305fd2039b96c02"
 # cookie_string="a932166bb57aff99a121259288de5571"
 headers = {
-  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  'Cookie': 'PTGSESSID=' + cookie_string
+    'Accept': '*/*',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'DNT': '1',
+    'Host': 'coursebook.utdallas.edu',
+    'Origin': 'https://coursebook.utdallas.edu',
+    'Referer': 'https://coursebook.utdallas.edu/search',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36 Edg/84.0.522.63',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Cookie': 'PTGSESSID=' + cookie_string
 }
 
 text_file = open("courseCombine.txt", "r")
@@ -362,7 +374,7 @@ def get_query(query):
     res = conn.getresponse()
     
     data = res.read().decode("utf-8")
-    print(data)
+    # print(data)
     html = data.split('"#sr":"')[1].split("}}")[0]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
@@ -396,7 +408,7 @@ def get_query(query):
         data.append(text)
     response = requests.request("GET", totalQuery, headers={}, data = {})
     resps = response.text.encode('utf8')
-    print(resps)
+    # print(resps)
     resp_arr = json.loads(resps)
     inx = 0
     for inx in range(0,len(resp_arr)):
