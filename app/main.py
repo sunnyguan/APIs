@@ -371,6 +371,7 @@ def get_query(query):
     except Exception as e:
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
         conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+    print(conn)
     res = conn.getresponse()
     
     data = res.read().decode("utf-8")
