@@ -1,5 +1,5 @@
 import base64
-from flask import Flask, request, jsonify, flash, redirect, url_for, send_from_directory
+from flask import Flask, request, jsonify, flash, redirect, url_for, send_from_directory, make_response
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 import numpy as np
@@ -86,7 +86,7 @@ app.config['UPLOAD_FOLDER'] = 'app/uploads'
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-save_dir = '/tmp/' # '/tmp/'
+save_dir = '' # '/tmp/'
 
 @app.route('/api/convert', methods=['GET', 'POST'])
 def convertFile():
@@ -248,7 +248,11 @@ def uploaded_file(filename):
 @app.route('/ics')
 def ics_refresh():
     urllib.request.urlretrieve("https://elearning.utdallas.edu/webapps/calendar/calendarFeed/0e99d7efdf9049f7837d2b61de293e31/learn.ics", save_dir + "learn.ics")
-    return redirect(url_for('upload_convert', filename='learn.ics'))
+    with open('learn.ics', 'r') as file:
+        data = file.read()
+    response = make_response(data, 200)
+    response.mimetype = "text/plain"
+    return response
 
 @app.route('/converted/<filename>')
 def upload_convert(filename):

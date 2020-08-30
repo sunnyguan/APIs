@@ -245,56 +245,56 @@ RDATE:19450814T180000
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20200830T120000
 DTEND;TZID=America/Chicago:20200830T123000
 SUMMARY:test
-UID:20200830T223255Z-_blackboard.data.calendar.CalendarEntry-_167228_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225007Z-_blackboard.data.calendar.CalendarEntry-_167228_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20200801T100000
 DTEND;TZID=America/Chicago:20200801T160000
 SUMMARY:Turnitin Maintenance Outage - August 1 (Sat)\, 10am-4pm
-UID:20200830T223256Z-_blackboard.data.calendar.CalendarEntry-_161545_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225008Z-_blackboard.data.calendar.CalendarEntry-_161545_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:Turnitin has scheduled a maintenance outage for Saturday\, August 1st\, from 10am through 4pm CST. During this 6hr window\, users will be unable to access Turnitin. Please contact elearning@utdallas.edu if you have any questions.\n\nPLEASE NOTE: This DOES NOT impact the regular eLearning assignment tool.\n
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20200516T210000
 DTEND;TZID=America/Chicago:20200517T093000
 SUMMARY:eLearning Upgrade Outage Scheduled - May16 (9pm) - May17(9am)
-UID:20200830T223257Z-_blackboard.data.calendar.CalendarEntry-_158657_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225009Z-_blackboard.data.calendar.CalendarEntry-_158657_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:An eLearning outage has been scheduled for 9pm CST\, May 16 (Sat) through 9am\, May 17 (Sun). This 12hr window will be used to upgrade eLearning. During this time\, eLearning will not be available.  If you have any questions\, please email elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20191003T230000
 DTEND;TZID=America/Chicago:20191004T050000
 SUMMARY:eLearning OUTAGE Scheduled - Oct. 3 (11pm) - Oct. 4 (5am)
-UID:20200830T223258Z-_blackboard.data.calendar.CalendarEntry-_148472_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225010Z-_blackboard.data.calendar.CalendarEntry-_148472_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:Blackboard (UTD’s eLearning vendor) will perform maintenance to the data center from 11pm CST\, Oct. 3 (Thu) through 5am\, Oct.4 (Fri). During this 6-hour maintenance window\, Blackboard does expect an extended service outage during which eLearning will not be available.  We strongly recommend users plan not to use eLearning during this time.  If you have any questions\, please contact elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20200502T100000
 DTEND;TZID=America/Chicago:20200502T140000
 SUMMARY:Upcoming Turnitin Maintenance
-UID:20200830T223259Z-_blackboard.data.calendar.CalendarEntry-_158078_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225011Z-_blackboard.data.calendar.CalendarEntry-_158078_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:Turnitin has scheduled emergency maintenance for next Saturday\, May 2\, from 10am-2pm CST.  During this time\, users will experience a service outage.  Please see the email below from Turnitin for more details.\n\nUpcoming scheduled maintenance notice\n\nTurnitin will require an emergency maintenance window from 08:00-12:00 PDT\, 16:00-20:00 BST\, 01:00-05:00 AEST (May 3\, 2020) [go to <a href="https://tinyurl.com/y9r95mz3">https://tinyurl.com/y9r95mz3</a> for local time] as a pre-emptive measure to avoid rescheduled maintenance work being carried out by a third-party network provider during the week. During this time\, there may be an interruption to our services. We are planning for this work to only take the first two hours of this window\, however we ask that you plan for the full duration. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200830T223255Z
+DTSTAMP:20200830T225007Z
 DTSTART;TZID=America/Chicago:20200327T000000
 DTEND;TZID=America/Chicago:20200327T040000
 SUMMARY:Bb Collaborate - Unplanned Maintenance
-UID:20200830T223300Z-_blackboard.data.calendar.CalendarEntry-_156728_1@fgprd-100946-205964-app009.mhint
+UID:20200830T225012Z-_blackboard.data.calendar.CalendarEntry-_156728_1@fgprd-100946-205964-app007.mhint
 DESCRIPTION:Blackboard will be performing unplanned infrastructure maintenance for Blackboard Collaborate this Friday (March 27) from 12am - 4am CST (early morning). Blackboard Collaborate users will experience intermittent availability during this 4hr window.  If you have any questions\, please email elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
