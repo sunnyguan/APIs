@@ -25,6 +25,7 @@ from PIL import Image
 from flask import send_from_directory, Response
 import PIL
 import functools
+import urllib.request
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -243,7 +244,12 @@ def uploaded_file(filename):
     res = courses.split("2020 Fall")[0].findall(r"[A-Z]+ [0-9]+")
     resp = jsonify(res)
     return resp
-   
+
+@app.route('/ics')
+def ics_refresh():
+    urllib.request.urlretrieve("https://elearning.utdallas.edu/webapps/calendar/calendarFeed/0e99d7efdf9049f7837d2b61de293e31/learn.ics", save_dir + "learn.ics")
+    return redirect(url_for('upload_convert', filename='learn.ics'))
+
 @app.route('/converted/<filename>')
 def upload_convert(filename):
     upload_path = '../' + save_dir
