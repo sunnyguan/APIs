@@ -245,26 +245,23 @@ def uploaded_file(filename):
     resp = jsonify(res)
     return resp
 
+@app.route("/icsUpdate", methods=['GET'])
+@cross_origin()
+def icsUpdate():
+    payload = request.args.get('ics')
+    ptgid = request.args.get('ptg')
+    f = open(ptgid+".ics", "w")
+    f.write(payload)
+    f.close()
+    response = make_response("Written to file.", 200)
+    return response
+
 @app.route('/ics')
 def ics_refresh():
-    url = "https://elearning.utdallas.edu/webapps/calendar/calendarFeed/0e99d7efdf9049f7837d2b61de293e31/learn.ics"
-
-    payload = {}
-    headers = {
-        'Connection': 'keep-alive',
-        'DNT': '1',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Edg/85.0.564.41',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-User': '?1',
-        'Sec-Fetch-Dest': 'document',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Cookie': 'JSESSIONID=1420E09E789C339D14FAFC3AF7A73495; __cfduid=d5b409e089ed4f553d84b39e944cc2b5c1597369759; COOKIE_CONSENT_ACCEPTED=true; _ga=GA1.2.1721463880.1597608460; PTGSESSID=62efa99cc49229f1f178dbaf298020b8; NSC_100946_wjq_69.196.229.253*443=ffffffff090d1b0945525d5f4f58455e445a4a4229a1; s_session_id=2C745F108A66E9F44D38A08C5498510B; web_client_cache_guid=0b662308-c764-49f2-86a8-ca4e400c9834; s_session_id=2C745F108A66E9F44D38A08C5498510B'
-    }
-    response = requests.request("GET", url, headers=headers, data = payload)
-    response = make_response(response.text, 200)
+    ptgid = request.args.get('ptg')
+    f = open(ptgid+".ics", "r")
+    lines = f.read()
+    response = make_response(lines, 200)
     response.mimetype = "text/plain"
     return response
 
