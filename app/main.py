@@ -250,7 +250,7 @@ def uploaded_file(filename):
 def icsUpdate():
     payload = request.args.get('ics')
     ptgid = request.args.get('ptg')
-    f = open(ptgid+".ics", "w")
+    f = open(save_dir + ptgid+".ics", "w")
     f.write(payload)
     f.close()
     response = make_response("Written to file.", 200)
@@ -259,7 +259,7 @@ def icsUpdate():
 @app.route('/ics')
 def ics_refresh():
     ptgid = request.args.get('ptg')
-    f = open(ptgid+".ics", "r")
+    f = open(save_dir + ptgid+".ics", "r")
     lines = f.read()
     response = make_response(lines, 200)
     response.mimetype = "text/plain"
