@@ -245,11 +245,13 @@ def uploaded_file(filename):
     resp = jsonify(res)
     return resp
 
-@app.route("/icsUpdate", methods=['GET'])
+@app.route("/icsUpdate", methods=['POST'])
 @cross_origin()
 def icsUpdate():
-    payload = request.args.get('ics')
-    ptgid = request.args.get('ptg')
+    req = request.json
+    print(req)
+    payload = req['ics']
+    ptgid = req['ptg']
     f = open(save_dir + ptgid+".ics", "w")
     f.write(payload)
     f.close()
@@ -259,7 +261,7 @@ def icsUpdate():
 @app.route('/ics')
 def ics_refresh():
     ptgid = request.args.get('ptg')
-    f = open(save_dir + ptgid+".ics", "r")
+    f = open(save_dir + ptgid+".ics", "rb")
     lines = f.read()
     response = make_response(lines, 200)
     response.mimetype = "text/plain"

@@ -245,178 +245,178 @@ RDATE:19450814T180000
 END:DAYLIGHT
 END:VTIMEZONE
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200830T120000
 DTEND;TZID=America/Chicago:20200830T123000
 SUMMARY:test
-UID:20200831T025959Z-_blackboard.data.calendar.CalendarEntry-_167228_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031540Z-_blackboard.data.calendar.CalendarEntry-_167228_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200830T120000
 DTEND;TZID=America/Chicago:20200830T123000
 SUMMARY:test2333
-UID:20200831T030000Z-_blackboard.data.calendar.CalendarEntry-_167229_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031541Z-_blackboard.data.calendar.CalendarEntry-_167229_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:wfweafefwfawef
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200801T100000
 DTEND;TZID=America/Chicago:20200801T160000
 SUMMARY:Turnitin Maintenance Outage - August 1 (Sat)\, 10am-4pm
-UID:20200831T030001Z-_blackboard.data.calendar.CalendarEntry-_161545_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031542Z-_blackboard.data.calendar.CalendarEntry-_161545_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:Turnitin has scheduled a maintenance outage for Saturday\, August 1st\, from 10am through 4pm CST. During this 6hr window\, users will be unable to access Turnitin. Please contact elearning@utdallas.edu if you have any questions.\n\nPLEASE NOTE: This DOES NOT impact the regular eLearning assignment tool.\n
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200516T210000
 DTEND;TZID=America/Chicago:20200517T093000
 SUMMARY:eLearning Upgrade Outage Scheduled - May16 (9pm) - May17(9am)
-UID:20200831T030002Z-_blackboard.data.calendar.CalendarEntry-_158657_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031543Z-_blackboard.data.calendar.CalendarEntry-_158657_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:An eLearning outage has been scheduled for 9pm CST\, May 16 (Sat) through 9am\, May 17 (Sun). This 12hr window will be used to upgrade eLearning. During this time\, eLearning will not be available.  If you have any questions\, please email elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20191003T230000
 DTEND;TZID=America/Chicago:20191004T050000
 SUMMARY:eLearning OUTAGE Scheduled - Oct. 3 (11pm) - Oct. 4 (5am)
-UID:20200831T030003Z-_blackboard.data.calendar.CalendarEntry-_148472_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031544Z-_blackboard.data.calendar.CalendarEntry-_148472_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:Blackboard (UTD’s eLearning vendor) will perform maintenance to the data center from 11pm CST\, Oct. 3 (Thu) through 5am\, Oct.4 (Fri). During this 6-hour maintenance window\, Blackboard does expect an extended service outage during which eLearning will not be available.  We strongly recommend users plan not to use eLearning during this time.  If you have any questions\, please contact elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200502T100000
 DTEND;TZID=America/Chicago:20200502T140000
 SUMMARY:Upcoming Turnitin Maintenance
-UID:20200831T030004Z-_blackboard.data.calendar.CalendarEntry-_158078_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031545Z-_blackboard.data.calendar.CalendarEntry-_158078_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:Turnitin has scheduled emergency maintenance for next Saturday\, May 2\, from 10am-2pm CST.  During this time\, users will experience a service outage.  Please see the email below from Turnitin for more details.\n\nUpcoming scheduled maintenance notice\n\nTurnitin will require an emergency maintenance window from 08:00-12:00 PDT\, 16:00-20:00 BST\, 01:00-05:00 AEST (May 3\, 2020) [go to <a href="https://tinyurl.com/y9r95mz3">https://tinyurl.com/y9r95mz3</a> for local time] as a pre-emptive measure to avoid rescheduled maintenance work being carried out by a third-party network provider during the week. During this time\, there may be an interruption to our services. We are planning for this work to only take the first two hours of this window\, however we ask that you plan for the full duration. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200327T000000
 DTEND;TZID=America/Chicago:20200327T040000
 SUMMARY:Bb Collaborate - Unplanned Maintenance
-UID:20200831T030005Z-_blackboard.data.calendar.CalendarEntry-_156728_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031546Z-_blackboard.data.calendar.CalendarEntry-_156728_1@fgprd-100946-205964-app005.mhint
 DESCRIPTION:Blackboard will be performing unplanned infrastructure maintenance for Blackboard Collaborate this Friday (March 27) from 12am - 4am CST (early morning). Blackboard Collaborate users will experience intermittent availability during this 4hr window.  If you have any questions\, please email elearning@utdallas.edu. 
 LOCATION:
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20201001T235900
 DTEND;TZID=America/Chicago:20201001T235900
 SUMMARY:Submit Short Essay
-UID:20200831T030006Z-_blackboard.platform.gradebook2.GradableItem-_1190212_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031547Z-_blackboard.platform.gradebook2.GradableItem-_1190212_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200910T170000
 DTEND;TZID=America/Chicago:20200910T170000
 SUMMARY:HWK1 Dice
-UID:20200831T030007Z-_blackboard.platform.gradebook2.GradableItem-_1184066_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031548Z-_blackboard.platform.gradebook2.GradableItem-_1184066_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200903T170000
 DTEND;TZID=America/Chicago:20200903T170000
 SUMMARY:Quiz 1: Your SWOT Self-Assessment
-UID:20200831T030008Z-_blackboard.platform.gradebook2.GradableItem-_1184099_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031549Z-_blackboard.platform.gradebook2.GradableItem-_1184099_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200908T170000
 DTEND;TZID=America/Chicago:20200908T170000
 SUMMARY:Quiz 2:
-UID:20200831T030009Z-_blackboard.platform.gradebook2.GradableItem-_1192546_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031550Z-_blackboard.platform.gradebook2.GradableItem-_1192546_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200902T120000
 DTEND;TZID=America/Chicago:20200902T120000
 SUMMARY:Homework #1
-UID:20200831T030010Z-_blackboard.platform.gradebook2.GradableItem-_1192321_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031551Z-_blackboard.platform.gradebook2.GradableItem-_1192321_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200827T180000
 DTEND;TZID=America/Chicago:20200827T180000
 SUMMARY:Home Work 1\, corrected\, 8/26 at 2:40p
-UID:20200831T030011Z-_blackboard.platform.gradebook2.GradableItem-_1192553_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031552Z-_blackboard.platform.gradebook2.GradableItem-_1192553_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200825T180000
 DTEND;TZID=America/Chicago:20200825T180000
 SUMMARY:Quiz1
-UID:20200831T030012Z-_blackboard.platform.gradebook2.GradableItem-_1192918_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031553Z-_blackboard.platform.gradebook2.GradableItem-_1192918_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20201001T235900
 DTEND;TZID=America/Chicago:20201001T235900
 SUMMARY:Project 1
-UID:20200831T030013Z-_blackboard.platform.gradebook2.GradableItem-_1196209_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031554Z-_blackboard.platform.gradebook2.GradableItem-_1196209_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200619T213000
 DTEND;TZID=America/Chicago:20200619T213000
 SUMMARY:Bridge Test for 6/19/2020
-UID:20200831T030014Z-_blackboard.platform.gradebook2.GradableItem-_1134690_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031555Z-_blackboard.platform.gradebook2.GradableItem-_1134690_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200829T235900
 DTEND;TZID=America/Chicago:20200829T235900
 SUMMARY:Assignment 1: Semester-at-a-Glance
-UID:20200831T030015Z-_blackboard.platform.gradebook2.GradableItem-_1156619_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031556Z-_blackboard.platform.gradebook2.GradableItem-_1156619_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200823T235900
 DTEND;TZID=America/Chicago:20200823T235900
 SUMMARY:Discussion 1: Introductions
-UID:20200831T030016Z-_blackboard.platform.gradebook2.GradableItem-_1156629_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031557Z-_blackboard.platform.gradebook2.GradableItem-_1156629_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200906T235900
 DTEND;TZID=America/Chicago:20200906T235900
 SUMMARY:Discussion 2: Campus Resources and Events
-UID:20200831T030017Z-_blackboard.platform.gradebook2.GradableItem-_1156630_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031558Z-_blackboard.platform.gradebook2.GradableItem-_1156630_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200913T235900
 DTEND;TZID=America/Chicago:20200913T235900
 SUMMARY:Discussion 3: Academic Goals
-UID:20200831T030018Z-_blackboard.platform.gradebook2.GradableItem-_1196413_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031559Z-_blackboard.platform.gradebook2.GradableItem-_1196413_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200824T235900
 DTEND;TZID=America/Chicago:20200824T235900
 SUMMARY:Ch 01 Quiz: People and Culture
-UID:20200831T030019Z-_blackboard.platform.gradebook2.GradableItem-_1192447_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031600Z-_blackboard.platform.gradebook2.GradableItem-_1192447_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200831T235900
 DTEND;TZID=America/Chicago:20200831T235900
 SUMMARY:CH 02 Quiz: Texas Constitution
-UID:20200831T030020Z-_blackboard.platform.gradebook2.GradableItem-_1196560_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031601Z-_blackboard.platform.gradebook2.GradableItem-_1196560_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 BEGIN:VEVENT
-DTSTAMP:20200831T025940Z
+DTSTAMP:20200831T031540Z
 DTSTART;TZID=America/Chicago:20200830T235900
 DTEND;TZID=America/Chicago:20200830T235900
 SUMMARY:THQ01
-UID:20200831T030021Z-_blackboard.platform.gradebook2.GradableItem-_1195093_1@fgprd-100946-205964-app005.mhint
+UID:20200831T031602Z-_blackboard.platform.gradebook2.GradableItem-_1195093_1@fgprd-100946-205964-app005.mhint
 END:VEVENT
 END:VCALENDAR
