@@ -249,7 +249,6 @@ def uploaded_file(filename):
 @cross_origin()
 def icsUpdate():
     req = request.json
-    print(req)
     payload = req['ics']
     ptgid = req['ptg']
     f = open(save_dir + ptgid+".ics", "w")
@@ -257,6 +256,31 @@ def icsUpdate():
     f.close()
     response = make_response("Written to file.", 200)
     return response
+
+@app.route("/relay", methods=['POST'])
+@cross_origin()
+def relay():
+    req = request.json
+    cookies = req['cookies']
+    url = req['url']
+    # url = "https://elearning.utdallas.edu/learn/api/public/v1/users/_267278_1/courses"
+    payload = {}
+    headers = {
+        'Connection': 'keep-alive',
+        'DNT': '1',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Edg/85.0.564.44',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Dest': 'document',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cookie': cookies
+    }
+
+    response = requests.request("GET", url, headers=headers, data = payload)
+
+    return jsonify(response.json())
 
 @app.route('/ics')
 def ics_refresh():
