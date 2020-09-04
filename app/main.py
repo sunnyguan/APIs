@@ -33,7 +33,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 
-cookie_string="f0323dafcfaf33a13305fd2039b96c02"
+cookie_string="9e4b631232706232965b1c6f595fd3d1"
 # cookie_string="a932166bb57aff99a121259288de5571"
 headers = {
     'Accept': '*/*',
@@ -51,6 +51,8 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
     'Cookie': 'PTGSESSID=' + cookie_string
 }
+
+
 
 text_file = open("courseCombine.txt", "r")
 courses = text_file.read().split("\n")
@@ -437,7 +439,7 @@ def get_query(query):
     for entry in soup.find('tbody').find_all('tr'):
         text = {}
         all_td = entry.find_all('td')
-        all_td.pop(0) # CB added hidden element on 8/12/2020
+        all_td.pop(2) # CB added hidden element on 8/12/2020, moved to [2] on 9/4/2020
         arry = all_td[1].find('a').text.split('.')
         text["open"] = "Open" if "Open" in all_td[0].text else "Full"
         text["id"] = arry[1]
