@@ -47,7 +47,7 @@ else:
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument('--headless')
-    
+    chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36 Edg/85.0.564.51")
 
 def seleniumRefresh():
     global headers
@@ -66,7 +66,6 @@ def seleniumRefresh():
             headers["Cookie"] = 'PTGSESSID=' + c["value"]
     print("new cookie: " + headers["Cookie"])
     driver.close()
-
 
 app = Flask(__name__)
 cors = CORS(app)
