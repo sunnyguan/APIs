@@ -27,13 +27,54 @@ import PIL
 import functools
 import urllib.request
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
+
+on_server = True 
+chrome_options = None
+CHROMEDRIVER_PATH = None
+if not on_server:
+    chrome_options = webdriver.ChromeOptions()
+    # chrome_options.add_argument('--headless')
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-gpu")
+else:
+    CHROMEDRIVER_PATH = "/app/.chromedriver/bin/chromedriver"
+    chrome_bin = os.environ.get('GOOGLE_CHROME_BIN', "chromedriver")
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = chrome_bin
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument('--headless')
+    
+
+def seleniumRefresh():
+    global headers
+    print("old cookie: " + headers["Cookie"])
+    if not on_server:
+        driver = webdriver.Chrome(chrome_options=chrome_options, executable_path=r"C:\Eworkspace\FaceAPI\testApp\app\chromedriver\chromedriver.exe")
+    else:
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)   
+    driver.get("https://coursebook.utdallas.edu/search")
+    driver.find_element_by_id("srch").clear()
+    driver.find_element_by_id("srch").send_keys("MATH 3323")
+    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
+    cookies = driver.get_cookies()
+    for c in cookies:
+        if c["name"] == 'PTGSESSID':
+            headers["Cookie"] = 'PTGSESSID=' + c["value"]
+    print("new cookie: " + headers["Cookie"])
+    driver.close()
+
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
 
-cookie_string="9e4b631232706232965b1c6f595fd3d1"
+cookie_string="d2d327e693509a987c4d9783b7a260e3f"
 # cookie_string="a932166bb57aff99a121259288de5571"
 headers = {
     'Accept': '*/*',
@@ -51,8 +92,6 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest',
     'Cookie': 'PTGSESSID=' + cookie_string
 }
-
-
 
 text_file = open("courseCombine.txt", "r")
 courses = text_file.read().split("\n")
@@ -411,6 +450,7 @@ def smartSearch():
     resp = jsonify(result)
     return resp
 
+
 def get_query(query):
     print("acquiring html...")
     payload = "action=search&s[]=" + query + "&s[]=term_20f"
@@ -420,12 +460,21 @@ def get_query(query):
     except Exception as e:
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
         conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
-    print(conn)
+    # print(conn)
     res = conn.getresponse()
     
     data = res.read().decode("utf-8")
+    json_obj = []
+    try:
+        json_obj = json.loads(data)
+    except Exception as e:
+        seleniumRefresh()
+        print("refreshing...")
+        return get_query(query)
+
+    # print(json_obj["sethtml"]["#sr"])
     # print(data)
-    html = data.split('"#sr":"')[1].split("}}")[0]
+    html = json_obj["sethtml"]["#sr"]
     s = html.replace("\\n", "\n").replace("\\", "")
     print("acquired.")
     print("collecting...")
