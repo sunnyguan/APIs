@@ -31,7 +31,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
-on_server = True 
+on_server = False 
 chrome_options = None
 CHROMEDRIVER_PATH = None
 if not on_server:
@@ -455,10 +455,10 @@ def get_query(query):
     payload = "action=search&s[]=" + query + "&s[]=term_20f"
     print(payload)
     try:
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        conn.request("POST", "/clips/clip-cb11.zog", payload, headers)
     except Exception as e:
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        conn.request("POST", "/clips/clip-cb11.zog", payload, headers)
     # print(conn)
     res = conn.getresponse()
     
@@ -558,10 +558,10 @@ def course_api():
     print(payload)
     
     try:
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        conn.request("POST", "/clips/clip-cb11.zog", payload, headers)
     except Exception as e:
         conn = http.client.HTTPSConnection("coursebook.utdallas.edu")
-        conn.request("POST", "/clips/clip-coursebook.zog", payload, headers)
+        conn.request("POST", "/clips/clip-cb11.zog", payload, headers)
         
     res = conn.getresponse()
     data = res.read().decode("utf-8")
