@@ -31,7 +31,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
-on_server = False 
+on_server = True 
 chrome_options = None
 CHROMEDRIVER_PATH = None
 if not on_server:
