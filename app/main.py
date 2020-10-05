@@ -31,7 +31,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
-on_server = True 
+on_server = False 
 chrome_options = None
 CHROMEDRIVER_PATH = None
 if not on_server:
@@ -59,13 +59,13 @@ def seleniumRefresh():
     driver.get("https://coursebook.utdallas.edu/search")
     driver.find_element_by_id("srch").clear()
     driver.find_element_by_id("srch").send_keys("MATH 3323")
-    driver.find_element_by_css_selector("#classsearch > a").click()
+    driver.find_element_by_id("srch").send_keys(Keys.RETURN)
     cookies = driver.get_cookies()
     for c in cookies:
         if c["name"] == 'PTGSESSID':
             headers["Cookie"] = 'PTGSESSID=' + c["value"]
     print("new cookie: " + headers["Cookie"])
-    # driver.close()
+    driver.close()
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -89,8 +89,7 @@ headers = {
     'Sec-Fetch-Site': 'same-origin',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36 Edg/84.0.522.63',
     'X-Requested-With': 'XMLHttpRequest',
-    'Cookie': 'PTGSESSID=' + cookie_string,
-
+    'Cookie': 'PTGSESSID=' + cookie_string
 }
 
 text_file = open("courseCombine.txt", "r")
