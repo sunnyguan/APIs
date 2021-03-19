@@ -16,7 +16,7 @@ MarkupSafe==1.1.1
 numpy==1.19.1
 opencv-python-headless==4.4.0.40
 packaging==20.4
-Pillow==7.2.0
+Pillow==8.1.1
 pyparsing==2.4.7
 PyPDF2==1.26.0
 random-user-agent==1.0.1
